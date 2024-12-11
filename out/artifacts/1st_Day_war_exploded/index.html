@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Application</title>
+</head>
+<body>
+<h1 style="text-align: center">My First Web Application</h1>
+<button id="ajax-btn">Send Request</button>
+<script src="assests/js/jquery-3.7.1.min.js"></script>
+<script>
+    $('#ajax-btn').click(function () {
+        $.ajax({
+            url: "http://localhost:8080/1st_Day_war_exploded/hello",
+        }).done(function (response) {
+            console.log('Success', response);
+        })
+    });
+
+</script>
+</body>
+</html>
