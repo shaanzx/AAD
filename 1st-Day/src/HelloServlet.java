@@ -11,8 +11,36 @@ import java.io.PrintWriter;
 public class HelloServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Request received");
+        System.out.println("Get Request received");
         PrintWriter out = resp.getWriter();
-        out.println("Hello World");
+        out.println("Get Method Executed");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Post Request received");
+        PrintWriter out = resp.getWriter();
+        out.println("Post Method Executed");
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Put Request received");
+        PrintWriter out = resp.getWriter();
+        out.println("Put Method Executed");
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Delete Request received");
+        PrintWriter out = resp.getWriter();
+        out.println("Delete Method Executed");
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Options Request received");
+        PrintWriter out = resp.getWriter();
+        out.println("Options Method Executed");
     }
 }
