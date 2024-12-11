@@ -12,7 +12,7 @@
     $('#ajax-btn').click(function () {
         $.ajax({
             url: "http://localhost:8080/1st_Day_war_exploded/hello",
-            method: 'OPTIONS'
+            method: 'POST'
         }).done(function (response) {
             console.log('Success', response);
         })
