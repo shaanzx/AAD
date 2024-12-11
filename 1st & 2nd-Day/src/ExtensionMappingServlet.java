@@ -15,6 +15,5 @@ public class ExtensionMappingServlet extends HttpServlet {
         System.out.println("Extension Mapping Servlet Get Request received");
         PrintWriter out = resp.getWriter();
         out.println("Extension Mapping Servlet Executed");
-        out.println("");
     }
 }
