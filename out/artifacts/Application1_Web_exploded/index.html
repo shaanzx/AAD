@@ -164,6 +164,42 @@
         });
     };
 
+    $("#btn_save_customer").click((e) => {
+        e.preventDefault();
+        const id = $("#id").val();
+        const name = $("#name").val();
+        const address = $("#address").val();
+
+        const customerData = {
+            id, name, address
+        }
+        $.ajax({
+            url: "http://localhost:8080/Application1_Web_exploded/customer",
+            type: "POST",
+            data :{
+                id: id,
+                name: name,
+                address: address
+            },
+            success(res) {
+                console.log(res);
+                fetchCustomerData();
+                $("#customerModal").modal("hide");
+                $("customerModal").trigger("reset");
+            },
+            error(res) {
+                console.log(res);
+            }
+        });
+    });
+
+    function editCustomer(id, name, address) {
+        $("#updated_customer_id").val(id);
+        $("#updated_name").val(name);
+        $("#updated_address").val(address);
+        $("#updateCustomerModal").modal("show");
+    }
+
     fetchCustomerData();
 </script>
 </body>
