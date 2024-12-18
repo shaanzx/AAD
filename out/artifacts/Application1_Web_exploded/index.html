@@ -16,6 +16,44 @@
 </head>
 
 <body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid d-flex">
+        <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-cogs me-2"></i>Management System
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end gap-3" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fa-solid fa-users me-2"></i>Customer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-boxes-stacked me-2"></i>Item
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-shopping-cart me-2"></i>Order
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-receipt me-2"></i>Order Details
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
 <div class="container mt-5">
     <h1 class="text-center">Customer Management System</h1>
 
@@ -39,10 +77,6 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="contact" class="form-label">Contact</label>
-                            <input type="text" class="form-control" id="contact">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
@@ -70,10 +104,7 @@
                             <label for="updated_name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="updated_name">
                         </div>
-                        <div class="mb-3">
-                            <label for="updated_contact" class="form-label">Contact</label>
-                            <input type="text" class="form-control" id="updated_contact">
-                        </div>
+                        >
                         <div class="mb-3">
                             <label for="updated_address" class="form-label">Address</label>
                             <input type="text" class="form-control" id="updated_address">
@@ -90,7 +121,6 @@
         <tr>
             <td>ID</td>
             <td>Name</td>
-            <td>Contact</td>
             <td>Address</td>
             <td>Actions</td>
         </tr>
@@ -103,116 +133,38 @@
 <script src="js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-
     const fetchCustomerData = () => {
         $.ajax({
-            url: "http://localhost:8080/JavaEE_Day02_Web_exploded/customer",
+            url: "http://localhost:8080/Application1_Web_exploded/customer",
             type: "GET",
             success(res) {
-                console.log(res)
-                $('#customer_table_body').empty()
+                console.log(res);
+                $('#customer_table_body').empty();
                 res.forEach(customer => {
                     $('#customer_table_body').append(`
-                        <tr>
-                            <td>${customer.id}</td>
-                            <td>${customer.name}</td>
-                            <td>${customer.contact}</td>
-                            <td>${customer.address}</td>
-                            <td>
-                                <button class="btn text-warning btn-sm" onclick="editCustomer(${customer.id},'${customer.name}','${customer.contact}','${customer.address}')">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
-                                <button class="btn text-danger btn-sm" onclick="deleteCustomer(${customer.id})">
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `)
-                })
+                    <tr>
+                        <td>${customer.id}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.address}</td>
+                        <td>
+                            <button class="btn text-warning btn-sm" onclick="editCustomer(${customer.id},'${customer.name}','${customer.address}')">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </button>
+                            <button class="btn text-danger btn-sm" onclick="deleteCustomer(${customer.id})">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+                });
             },
             error(res) {
-                console.log(res)
+                console.log(res);
             }
-        })
-    }
+        });
+    };
 
-    $('#btn_save_customer').click((e) => {
-        e.preventDefault()
-        const name = $('#name').val()
-        const contact = $('#contact').val()
-        const address = $('#address').val()
-
-        const customerData = {
-            name, contact, address
-        }
-        $.ajax({
-            url: "http://localhost:8080/JavaEE_Day02_Web_exploded/customer",
-            type: "POST",
-            data: customerData,
-            success(res) {
-                console.log(res)
-                fetchCustomerData()
-                $('#customerModal').modal('hide')
-            },
-            error(res) {
-                console.log(res)
-            }
-        })
-    })
-
-    $('#btn_update_customer').click((e) => {
-        e.preventDefault()
-
-        const id = $('#updated_customer_id').val()
-        const name = $('#updated_name').val()
-        const contact = $('#updated_contact').val()
-        const address = $('#updated_address').val()
-
-        const customerData = {
-            id, name, contact, address
-        }
-
-        $.ajax({
-            url: `http://localhost:8080/JavaEE_Day02_Web_exploded/customer`,
-            type: "PUT",
-            data: customerData,
-            success(res) {
-                console.log(res)
-                fetchCustomerData()
-                $('#updateCustomerModal').modal('hide')
-            },
-            error(res) {
-                console.log(res)
-            }
-        })
-    })
-
-    const editCustomer = (uid, name, contact, address) => {
-        $('#updated_customer_id').val(uid)
-        $('#updated_name').val(name)
-        $('#updated_contact').val(contact)
-        $('#updated_address').val(address)
-
-        $('#updateCustomerModal').modal('show')
-    }
-
-    const deleteCustomer = (id) => {
-        if (confirm("Are you sure?")) {
-            $.ajax({
-                url: `http://localhost:8080/JavaEE_Day02_Web_exploded/customer?id=${id}`,
-                type: "DELETE",
-                success(res) {
-                    console.log(res)
-                    fetchCustomerData()
-                },
-                error(res) {
-                    console.log(res)
-                }
-            })
-        }
-    }
-
-    fetchCustomerData()
+    fetchCustomerData();
 </script>
 </body>
 </html>
