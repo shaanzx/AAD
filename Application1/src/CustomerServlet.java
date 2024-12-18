@@ -115,4 +115,29 @@ public class CustomerServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String id = req.getParameter("id");
+        String name = req.getParameter("name");
+        String address = req.getParameter("address");
+
+        if(id == null || name == null || address == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\" : \"Invalid request\"}");
+            return;
+        }
+        Connection connection = getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Customer SET name = ?, address = ? WHERE id = ?");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, address);
+            preparedStatement.setString(3, id);
+            preparedStatement.executeUpdate();
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
