@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+            integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+</head>
+
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Customer Management System</h1>
+
+    <hr/>
+
+    <button type="button" class="btn btn-success mb-3 text-right" data-bs-toggle="modal"
+            data-bs-target="#customerModal">
+        Add New Customer
+    </button>
+
+    <!-- Add Customer Modal -->
+    <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="container m-2">
+                    <form>
+                        <div class="mb-3">
+                            <label for="id" class="form-label">ID</label>
+                            <input type="text" class="form-control" id="id">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contact" class="form-label">Contact</label>
+                            <input type="text" class="form-control" id="contact">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address">
+                        </div>
+                        <button id="btn_save_customer" type="submit" class="btn btn-success">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Customer Modal -->
+    <div class="modal fade" id="updateCustomerModal" tabindex="-1" aria-labelledby="updateCustomerModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="container m-2">
+                    <form>
+                        <div class="mb-3">
+                            <label for="updated_customer_id" class="form-label">Customer ID</label>
+                            <input type="text" class="form-control" id="updated_customer_id" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updated_name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="updated_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="updated_contact" class="form-label">Contact</label>
+                            <input type="text" class="form-control" id="updated_contact">
+                        </div>
+                        <div class="mb-3">
+                            <label for="updated_address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="updated_address">
+                        </div>
+                        <button id="btn_update_customer" type="submit" class="btn btn-warning">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Name</td>
+            <td>Contact</td>
+            <td>Address</td>
+            <td>Actions</td>
+        </tr>
+        </thead>
+        <tbody id="customer_table_body">
+
+        </tbody>
+    </table>
+</div>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    const fetchCustomerData = () => {
+        $.ajax({
+            url: "http://localhost:8080/JavaEE_Day02_Web_exploded/customer",
+            type: "GET",
+            success(res) {
+                console.log(res)
+                $('#customer_table_body').empty()
+                res.forEach(customer => {
+                    $('#customer_table_body').append(`
+                        <tr>
+                            <td>${customer.id}</td>
+                            <td>${customer.name}</td>
+                            <td>${customer.contact}</td>
+                            <td>${customer.address}</td>
+                            <td>
+                                <button class="btn text-warning btn-sm" onclick="editCustomer(${customer.id},'${customer.name}','${customer.contact}','${customer.address}')">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn text-danger btn-sm" onclick="deleteCustomer(${customer.id})">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `)
+                })
+            },
+            error(res) {
+                console.log(res)
+            }
+        })
+    }
+
+    $('#btn_save_customer').click((e) => {
+        e.preventDefault()
+        const name = $('#name').val()
+        const contact = $('#contact').val()
+        const address = $('#address').val()
+
+        const customerData = {
+            name, contact, address
+        }
+        $.ajax({
+            url: "http://localhost:8080/JavaEE_Day02_Web_exploded/customer",
+            type: "POST",
+            data: customerData,
+            success(res) {
+                console.log(res)
+                fetchCustomerData()
+                $('#customerModal').modal('hide')
+            },
+            error(res) {
+                console.log(res)
+            }
+        })
+    })
+
+    $('#btn_update_customer').click((e) => {
+        e.preventDefault()
+
+        const id = $('#updated_customer_id').val()
+        const name = $('#updated_name').val()
+        const contact = $('#updated_contact').val()
+        const address = $('#updated_address').val()
+
+        const customerData = {
+            id, name, contact, address
+        }
+
+        $.ajax({
+            url: `http://localhost:8080/JavaEE_Day02_Web_exploded/customer`,
+            type: "PUT",
+            data: customerData,
+            success(res) {
+                console.log(res)
+                fetchCustomerData()
+                $('#updateCustomerModal').modal('hide')
+            },
+            error(res) {
+                console.log(res)
+            }
+        })
+    })
+
+    const editCustomer = (uid, name, contact, address) => {
+        $('#updated_customer_id').val(uid)
+        $('#updated_name').val(name)
+        $('#updated_contact').val(contact)
+        $('#updated_address').val(address)
+
+        $('#updateCustomerModal').modal('show')
+    }
+
+    const deleteCustomer = (id) => {
+        if (confirm("Are you sure?")) {
+            $.ajax({
+                url: `http://localhost:8080/JavaEE_Day02_Web_exploded/customer?id=${id}`,
+                type: "DELETE",
+                success(res) {
+                    console.log(res)
+                    fetchCustomerData()
+                },
+                error(res) {
+                    console.log(res)
+                }
+            })
+        }
+    }
+
+    fetchCustomerData()
+</script>
+</body>
+</html>
