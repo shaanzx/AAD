@@ -217,32 +217,48 @@
         $('#updateCustomerModal').modal("show");
     };
 
-    $("btn_update_customer").click((e) => {
+    $("#btn_update_customer").click((e) => {
         e.preventDefault();
+
         const id = $("#updated_customer_id").val();
         const name = $("#updated_name").val();
         const address = $("#updated_address").val();
+
         $.ajax({
-            url: "http://localhost:8080/Application1_Web_exploded/customer",
+            url: `http://localhost:8080/Application1_Web_exploded/customer?id=${id}&name=${name}&address=${address}`, // Use only query parameters
             type: "PUT",
-            data: {
-                id: id,
-                name: name,
-                address: address
-            },
             success: (res) => {
-                console.log(res);
-                fetchCustomerData();
-                $("#updated_customer_id").val("");
+                console.log("Customer updated successfully.");
+                fetchCustomerData(); // Refresh data
+                $("#updated_customer_id").val(""); // Clear fields
                 $("#updated_name").val("");
                 $("#updated_address").val("");
-                $("#updateCustomerModal").modal("hide");
+                $("#updateCustomerModal").modal("hide"); // Close modal
             },
-            error(res) {
-                console.log(res);
+            error: (res) => {
+                console.error("Error updating customer:", res.responseText);
             }
-        })
-    })
+        });
+    });
+
+
+    const deleteCustomer = (id) => {
+        if (confirm("Are you sure you want to delete this customer?")) {
+            $.ajax({
+                url: `http://localhost:8080/Application1_Web_exploded/customer?id=${id}`,
+                type: "DELETE",
+                success: () => {
+                    alert("Customer deleted successfully.");
+                    fetchCustomerData();
+                },
+                error: (err) => {
+                    console.error(err);
+                    alert("Failed to delete the customer. Please try again.");
+                }
+            });
+        }
+    };
+
 
     fetchCustomerData();
 </script>

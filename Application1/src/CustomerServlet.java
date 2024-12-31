@@ -15,13 +15,13 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
-    List <CustomerDTO> customerDTOList = new ArrayList<>();
+    List<CustomerDTO> customerDTOList = new ArrayList<>();
 
     private Connection getConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/Company",
+                    "jdbc:mysql://localhost:3306/company",
                     "root",
                     "iJSE@123");
             return connection;
@@ -38,12 +38,11 @@ public class CustomerServlet extends HttpServlet {
 
         customerDTOList.clear();
 
-
         resp.setContentType("application/json");
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/Company",
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/company",
                     "root",
                     "iJSE@123");
 
@@ -98,7 +97,7 @@ public class CustomerServlet extends HttpServlet {
         String name = req.getParameter("name");
         String address = req.getParameter("address");
 
-        if(id == null || name == null || address == null) {
+        if (id == null || name == null || address == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\" : \"Invalid request\"}");
             return;
@@ -123,21 +122,80 @@ public class CustomerServlet extends HttpServlet {
         String name = req.getParameter("name");
         String address = req.getParameter("address");
 
-        if(id == null || name == null || address == null) {
+        if (id == null || name == null || address == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\" : \"Invalid request\"}");
             return;
+        } else {
+            Connection connection = getConnection();
+            CustomerDTO customer = findById(id);
+            try {
+                if (customer != null) {
+                    PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Customer SET name = ?, address = ? WHERE id = ?");
+                    preparedStatement.setString(1, name);
+                    preparedStatement.setString(2, address);
+                    preparedStatement.setString(3, id);
+                    preparedStatement.executeUpdate();
+                    resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+
+        if (id == null || id.isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\":\"Customer ID is required.\"}");
+            return;
+        }
+
+        try (Connection connection = getConnection()) {
+            CustomerDTO customer = findById(id);
+            if (customer != null) {
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "DELETE FROM Customer WHERE id = ?");
+                preparedStatement.setString(1, id);
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    resp.getWriter().write("{\"error\":\"Failed to delete the customer.\"}");
+                }
+            } else {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                resp.getWriter().write("{\"error\":\"Customer not found.\"}");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"error\":\"Failed to delete customer..\"}");
+        }
+    }
+
+
+    private CustomerDTO findById(String id) {
         Connection connection = getConnection();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Customer SET name = ?, address = ? WHERE id = ?");
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, address);
-            preparedStatement.setString(3, id);
-            preparedStatement.executeUpdate();
-            resp.setStatus(HttpServletResponse.SC_OK);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Customer WHERE id = ?");
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String name = resultSet.getString(2);
+                String address = resultSet.getString(3);
+                return new CustomerDTO(id, name, address);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 }
