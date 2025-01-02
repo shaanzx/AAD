@@ -66,26 +66,6 @@ public class CustomerServlet extends HttpServlet {
             }
             resp.getWriter().write(allCustomer.build().toString());
 
-     /*       StringBuilder customerJsonList = new StringBuilder("[");
-            for (CustomerDTO customerDTO : customerDTOList) {
-
-                String customerJson = String.format("{\"id\":\"%s\", \"name\":\"%s\", \"address\":\"%s\"}",
-                        customerDTO.getId(),
-                        customerDTO.getName(),
-                        customerDTO.getAddress());
-
-                customerJsonList.append(customerJson);
-
-                if (customerDTOList.indexOf(customerDTO) != customerDTOList.size()-1) {
-                    customerJsonList.append(",");
-                }
-            }
-            customerJsonList.append("]");
-            String customerJson = customerJsonList.toString();
-            PrintWriter out = resp.getWriter();
-            out.println(customerJson);*/
-
-
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
