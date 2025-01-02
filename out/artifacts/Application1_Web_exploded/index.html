@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="item.html">
                         <i class="fa-solid fa-boxes-stacked me-2"></i>Item
                     </a>
                 </li>
@@ -174,7 +174,10 @@
                         <td>${customer.name}</td>
                         <td>${customer.address}</td>
                         <td>
-                            <button class="btn btn-sm text-warning" onclick="editCustomer('${customer.id}', '${customer.name}', '${customer.address}')">
+                            <button class="btn btn-sm text-warning" onclick="editCustomer(
+                                '${customer.id}',
+                                '${customer.name}',
+                                '${customer.address}')">
                                 <i class="fa-regular fa-pen-to-square"></i>
                             </button>
                             <button class="btn btn-sm text-danger" onclick="deleteCustomer('${customer.id}')">
@@ -225,15 +228,15 @@
         const address = $("#updated_address").val();
 
         $.ajax({
-            url: `http://localhost:8080/Application1_Web_exploded/customer?id=${id}&name=${name}&address=${address}`, // Use only query parameters
+            url: `http://localhost:8080/Application1_Web_exploded/customer?id=${id}&name=${name}&address=${address}`,
             type: "PUT",
             success: (res) => {
                 console.log("Customer updated successfully.");
-                fetchCustomerData(); // Refresh data
-                $("#updated_customer_id").val(""); // Clear fields
+                fetchCustomerData();
+                $("#updated_customer_id").val("");
                 $("#updated_name").val("");
                 $("#updated_address").val("");
-                $("#updateCustomerModal").modal("hide"); // Close modal
+                $("#updateCustomerModal").modal("hide");
             },
             error: (res) => {
                 console.error("Error updating customer:", res.responseText);
@@ -258,7 +261,6 @@
             });
         }
     };
-
 
     fetchCustomerData();
 </script>
