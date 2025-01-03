@@ -1,3 +1,5 @@
+package dto;
+
 public class CustomerDTO {
     private String id;
       private String name;
@@ -38,7 +40,7 @@ public class CustomerDTO {
 
     @Override
     public String toString() {
-        return "CustomerDTO{" +
+        return "dto.CustomerDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +

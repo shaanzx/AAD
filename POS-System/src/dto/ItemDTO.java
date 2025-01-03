@@ -1,3 +1,5 @@
+package dto;
+
 public class ItemDTO {
     private String code;
     private String description;
@@ -48,7 +50,7 @@ public class ItemDTO {
 
     @Override
     public String toString() {
-        return "ItemDTO{" +
+        return "dto.ItemDTO{" +
                 "code='" + code + '\'' +
                 ", description='" + description + '\'' +
                 ", qty=" + qty +
