@@ -2,21 +2,235 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Order-Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-            integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-    />
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+        }
+        .navbar-brand i {
+            color: #1fbd93;
+        }
 
+        .navbar-dark .navbar-nav .nav-link {
+            color: #f5f5f5;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #1fbd93;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        .table th {
+            background-color: #f8f9fa;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-cogs me-2"></i>Management System
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end gap-3" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="../index.html">
+                        <i class="fa-solid fa-users me-2"></i>Customer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pages/item.html">
+                        <i class="fa-solid fa-boxes-stacked me-2"></i>Item
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pages/order.html">
+                        <i class="fa-solid fa-shopping-cart me-2"></i>Order
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pages/order_details.html">
+                        <i class="fa-solid fa-receipt me-2"></i>Order Details
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container py-5">
+    <h1 class="text-center mb-4">Order Management System</h1>
+
+    <!-- Customer Details Section -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-user me-2"></i>Customer Details
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="customerID" class="form-label">Customer ID</label>
+                    <select class="form-select" id="customerID">
+                        <option value="" selected disabled>Select Customer ID</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="customerName" class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" id="customerName" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label for="customerAddress" class="form-label">Customer Address</label>
+                    <input type="text" class="form-control" id="customerAddress" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Selection Section -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-box me-2"></i>Item Selection
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="itemCode" class="form-label">Item Code</label>
+                    <select class="form-select" id="itemCode">
+                        <option value="" selected disabled>Select Item Code</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" class="form-control" id="description" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label for="qty" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="qty" min="1">
+                </div>
+                <div class="col-md-3">
+                    <label for="unitPrice" class="form-label">Unit Price</label>
+                    <input type="text" class="form-control" id="unitPrice" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Section -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-shopping-cart me-2"></i>Order Details
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label for="orderID" class="form-label">Order ID</label>
+                    <input type="text" class="form-control" id="orderID">
+                </div>
+                <div class="col-md-6">
+                    <label for="orderDate" class="form-label">Order Date</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control" id="orderDate">
+                        <span class="input-group-text">
+                                <i class="fas fa-calendar"></i>
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary w-100 mb-4">
+                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+            </button>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer ID</th>
+                        <th>Item Code</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Cart items will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn btn-success w-100">
+                <i class="fas fa-check-circle me-2"></i>Place Order
+            </button>
+        </div>
+    </div>
+</div>
 
 <script src="../js/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    const getAllCustomers = () => {
+        $.ajax({
+            url: "http://localhost:8080/POS_System_Web_exploded/customer",
+            type: "GET",
+            success: (res) => {
+                // Clear existing options except the placeholder
+                $('#customerID').html('<option value="" selected disabled>Select Customer ID</option>');
+
+                // Check if the response is an array
+                if (Array.isArray(res)) {
+                    // Add options dynamically
+                    res.forEach(customer => {
+                        $('#customerID').append(
+                            `<option value="${customer.id}">${customer.id}</option>`
+                        );
+                    });
+                } else {
+                    alert("Unexpected response format.");
+                }
+            },
+            error: (err) => {
+                if (err.status === 404) {
+                    alert("Customer not found");
+                } else {
+                    alert(`An error occurred: ${err.statusText}`);
+                }
+            }
+        });
+    };
+    getAllCustomers();
+</script>
 </body>
 </html>

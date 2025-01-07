@@ -182,7 +182,7 @@
         $.ajax({
             url: "http://localhost:8080/POS_System_Web_exploded/item",
             type: "POST",
-            data: { itemCode, description, qty, unitPrice },
+            data: {itemCode, description, qty, unitPrice},
             success: () => {
                 fetchItemData();
                 $("#itemCode").val("");
@@ -224,7 +224,7 @@
         $.ajax({
             url: `http://localhost:8080/POS_System_Web_exploded/item?itemCode=${itemCode}&description=${description}&qty=${qty}&unitPrice=${unitPrice}`,
             type: "PUT",
-            data: { itemCode, description, qty, unitPrice },
+            data: {itemCode, description, qty, unitPrice},
             success: () => {
                 fetchItemData();
                 $("#updateItemModal").modal("hide");
