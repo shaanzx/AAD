@@ -11,6 +11,7 @@
             font-family: 'Arial', sans-serif;
             background-color: #ffffff;
         }
+
         .navbar-brand i {
             color: #1fbd93;
         }
@@ -22,25 +23,31 @@
         .navbar-dark .navbar-nav .nav-link:hover {
             color: #1fbd93;
         }
+
         .card {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
+
         .card-header {
             background-color: #f8f9fa;
             border-bottom: 2px solid #dee2e6;
         }
+
         .form-control:focus {
             border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
         }
+
         .table th {
             background-color: #f8f9fa;
         }
+
         .btn-primary {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
         .btn-primary:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
@@ -65,17 +72,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/item.html">
+                    <a class="nav-link" href="../pages/item.html">
                         <i class="fa-solid fa-boxes-stacked me-2"></i>Item
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/order.html">
+                    <a class="nav-link" href="../pages/order.html">
                         <i class="fa-solid fa-shopping-cart me-2"></i>Order
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/order_details.html">
+                    <a class="nav-link" href="../pages/order_details.html">
                         <i class="fa-solid fa-receipt me-2"></i>Order Details
                     </a>
                 </li>
@@ -133,8 +140,8 @@
                     <input type="text" class="form-control" id="description" readonly>
                 </div>
                 <div class="col-md-3">
-                    <label for="qty" class="form-label">Quantity</label>
-                    <input type="number" class="form-control" id="qty" min="1">
+                    <label for="qtyOnHand" class="form-label">Qty On Hand</label>
+                    <input type="number" class="form-control" id="qtyOnHand" min="1">
                 </div>
                 <div class="col-md-3">
                     <label for="unitPrice" class="form-label">Unit Price</label>
@@ -152,42 +159,66 @@
             </h5>
         </div>
         <div class="card-body">
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
+            <div class="row g-3 mb-4 align-items-end">
+                <div class="col-md-4">
                     <label for="orderID" class="form-label">Order ID</label>
                     <input type="text" class="form-control" id="orderID">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="orderDate" class="form-label">Order Date</label>
                     <div class="input-group">
                         <input type="date" class="form-control" id="orderDate">
                         <span class="input-group-text">
-                                <i class="fas fa-calendar"></i>
-                            </span>
+                <i class="fas fa-calendar"></i>
+            </span>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <label for="qty" class="form-label">Qty</label>
+                    <input type="number" class="form-control" id="qty" min="1">
+                </div>
             </div>
+
 
             <button class="btn btn-primary w-100 mb-4">
                 <i class="fas fa-cart-plus me-2"></i>Add to Cart
             </button>
 
-            <div class="table-responsive">
+            <!--<div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <th>Order ID</th>
                         <th>Customer ID</th>
                         <th>Item Code</th>
-                        <th>Quantity</th>
+                        <th>Qty</th>
                         <th>Unit Price</th>
                         <th>Total</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Cart items will be dynamically added here -->
+                    &lt;!&ndash; Cart items will be dynamically added here &ndash;&gt;
                     </tbody>
+                </table>
+            </div>-->
+
+            <div class="container-fluid mt-5 item-table">
+                <table class="table table-hover mb-0 text-center table-responsive">
+                    <thead>
+                    <tr>
+                        <th scope="col">Item Code</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody
+                            class="table-group-divider"
+                            id="order-detail-tbody"
+                    ></tbody>
                 </table>
             </div>
 
@@ -206,16 +237,26 @@
             url: "http://localhost:8080/POS_System_Web_exploded/customer",
             type: "GET",
             success: (res) => {
-                // Clear existing options except the placeholder
                 $('#customerID').html('<option value="" selected disabled>Select Customer ID</option>');
 
-                // Check if the response is an array
                 if (Array.isArray(res)) {
-                    // Add options dynamically
                     res.forEach(customer => {
                         $('#customerID').append(
                             `<option value="${customer.id}">${customer.id}</option>`
                         );
+                    });
+
+                    $('#customerID').on('change', function () {
+                        const selectedCustomerId = $(this).val();
+                        const selectedCustomer = res.find(customer => customer.id === selectedCustomerId);
+
+                        if (selectedCustomer) {
+                            $('#customerName').val(selectedCustomer.name);
+                            $('#customerAddress').val(selectedCustomer.address);
+                        } else {
+                            $('#customerName').val('');
+                            $('#customerAddress').val('');
+                        }
                     });
                 } else {
                     alert("Unexpected response format.");
@@ -230,6 +271,132 @@
             }
         });
     };
+
+
+    const getAllItems = () => {
+        $.ajax({
+            url: "http://localhost:8080/POS_System_Web_exploded/item",
+            type: "GET",
+            success: (res) => {
+                // Clear existing options except the placeholder
+                $('#itemCode').html('<option value="" selected disabled>Select Item Code</option>');
+
+                if (Array.isArray(res)) {
+                    res.forEach(item => {
+                        $('#itemCode').append(
+                            `<option value="${item.code}">${item.code}</option>`
+                        );
+                    });
+
+                    // Handle item selection
+                    $('#itemCode').on('change', function () {
+                        const selectedItemCode = $(this).val();
+                        const selectedItem = res.find(item => item.code === selectedItemCode);
+
+                        if (selectedItem) {
+                            $('#description').val(selectedItem.description);
+                            $('#qtyOnHand').val(selectedItem.qty);
+                            $('#unitPrice').val(selectedItem.price);
+                        } else {
+                            // Clear the fields if no item is found
+                            $('#description').val('');
+                            $('#qtyOnHand').val('');
+                            $('#unitPrice').val('');
+                        }
+                    });
+                } else {
+                    alert("Unexpected response format.");
+                }
+            },
+            error: (err) => {
+                if (err.status === 404) {
+                    alert("Item not found");
+                } else {
+                    alert(`An error occurred: ${err.statusText}`);
+                }
+            }
+        });
+    };
+
+    $('#item-select').on('submit', function (event) {
+        event.preventDefault();
+
+        let isValidated = $('#item-select input').toArray().every(element => $(element).hasClass('is-valid'));
+
+        if (isValidated) {
+            const itemCode = $('#txt-item-code').val();
+            const qty = parseInt($('#txt-order-qty').val());
+
+            if (itemDatabase.some(i => i.itemCode === itemCode)) {
+                const orderDetail = {itemCode: itemCode, qty: qty};
+                appendToOrderTable(orderDetail);
+                initializeTotalAndSubtotal();
+            } else {
+                showToast('error', 'Item not found !');
+            }
+        }
+    });
+
+    function appendToOrderTable(orderDetail) {
+        const item = getItemByCode(orderDetail.itemCode);
+        const existingRow = $(`#order-detail-tbody tr td:first-child:contains('${orderDetail.itemCode}')`).closest('tr');
+
+        if (existingRow.length > 0) {
+            const currentQty = parseInt(existingRow.find('td:eq(3)').text());
+            const newQty = currentQty + parseInt(orderDetail.qty);
+
+            if (newQty > item.qtyOnHand) {
+                showToast('error', 'Quantity exceeds available stock !');
+            } else {
+                // Update existing row
+                const newTotal = parseFloat(item.unitPrice * newQty).toFixed(2);
+
+                existingRow.find('td:eq(3)').text(newQty);
+                existingRow.find('td:eq(4)').text(newTotal);
+
+                $('#item-select input, #item-select select').removeClass('is-valid').val('');
+            }
+        } else {
+            // Add new row
+            $('#order-detail-tbody').append(`
+            <tr class="text-center">
+                <td>${orderDetail.itemCode}</td>
+                <td>${item.description}</td>
+                <td>${parseFloat(item.unitPrice).toFixed(2)}</td>
+                <td>${orderDetail.qty}</td>
+                <td>${parseFloat(item.unitPrice * orderDetail.qty).toFixed(2)}</td>
+                <td><button class="btn text-danger"><i class="fa-regular fa-trash-can"></i></button></td>
+            </tr>
+        `);
+            $('#item-select input, #item-select select').removeClass('is-valid').val('');
+        }
+    }
+
+    // Add Item to Cart
+    $('#add-item-btn').on('click', function () {
+        const itemCode = $('#txt-item-code').val().trim();
+        const orderQty = parseInt($('#txt-order-qty').val());
+
+        // Validate inputs
+        if (!itemCode || isNaN(orderQty) || orderQty <= 0) {
+            showToast('error', 'Please enter a valid item code and quantity.');
+            return;
+        }
+
+         const item = getItemByCode(itemCode);
+        if (!item) {
+            showToast('error', 'Item not found!');
+            return;
+        }
+
+        // Check stock availability
+        if (orderQty > item.qtyOnHand) {
+            showToast('error', 'Quantity exceeds available stock!');
+            return;
+        }
+    });
+
+        getAllItems();
     getAllCustomers();
 </script>
 </body>
