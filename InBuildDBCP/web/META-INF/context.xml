@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/">
+    <Resource
+        name="jdbc/pool"
+        type="javax.sqk.DataSource"
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/company"
+        username="root"
+        password="iJSE@123"
+        maxTotal="5"
+        initialSize="5"
+    >
+
+    </Resource>
+</Context>
