@@ -7,7 +7,7 @@
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
-          <root url="file://$MODULE_DIR$/web" relative="/" />
+          <root url="file://$MODULE_DIR$/../POS-System/Application2/web" relative="/" />
         </webroots>
       </configuration>
     </facet>
@@ -24,5 +24,6 @@
     <orderEntry type="library" name="javax.annotation-api-1.3.2" level="project" />
     <orderEntry type="library" name="javax.json-1.1.4" level="project" />
     <orderEntry type="library" name="mysql-connector-j-9.1.0" level="project" />
+    <orderEntry type="library" name="javax.json-api-1.1.4" level="project" />
   </component>
 </module>
