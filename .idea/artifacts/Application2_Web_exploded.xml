@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Application2:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Application2_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Application2/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Application2" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="jakarta.annotation-api-2.1.1" />
+          <element id="library" level="project" name="javax.annotation-api-1.3.2" />
+          <element id="library" level="project" name="javax.json-1.1.4" />
+          <element id="library" level="project" name="mysql-connector-j-9.1.0" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
